@@ -1,0 +1,32 @@
+<launch>
+  <arg name="pcd_path" default="$(find nrs_vision)/pcd/registrated_pcd/workpiece.pcd"/>
+  <arg name="frame_id" default="map"/>
+  <arg name="topic" default="/pcd_cloud"/>
+
+  <node pkg="nrs_mcp" type="pcd_publisher" name="pcd_publisher" output="screen">
+    <param name="pcd_path" value="$(arg pcd_path)"/>
+    <param name="frame_id" value="$(arg frame_id)"/>
+    <param name="topic" value="$(arg topic)"/>
+  </node>
+
+  <!-- RViz 자동 실행(선택). 미리 pcd_view.rviz를 저장해두면 편함 -->
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find nrs_mcp)/rviz/pcd_view.rviz" required="false"/>
+
+
+  <arg name="input_topic" default="/clicked_point"/>
+  <arg name="marker_topic" default="/visualization_marker"/>
+  <arg name="waypoint_file" default="$(find nrs_path)/data/selected_waypoints.txt"/>
+  <arg name="marker_scale" default="0.01"/>
+  <arg name="clear_file_on_start" default="true"/>
+
+  <node pkg="nrs_mcp" type="clicked_points_logger" name="clicked_points_logger" output="screen">
+    <param name="input_topic" value="$(arg input_topic)"/>
+    <param name="marker_topic" value="$(arg marker_topic)"/>
+    <param name="frame_id" value="$(arg frame_id)"/>
+    <param name="waypoint_file" value="$(arg waypoint_file)"/>
+    <param name="marker_scale" value="$(arg marker_scale)"/>
+    <param name="clear_file_on_start" value="$(arg clear_file_on_start)"/>
+  </node>
+
+
+</launch>

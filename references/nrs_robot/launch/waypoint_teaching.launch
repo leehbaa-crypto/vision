@@ -1,0 +1,32 @@
+<launch>
+
+  <node pkg="tf2_ros" type="static_transform_publisher" name="world_to_base" args="0 0 0 0 0 0 world base" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="base_link_to_base_link_inertia_rpy"
+      args="0 0 0 0 0 0 base_link base_link_inertia"/>
+
+
+  <!-- 1. 드라이버 실행 -->
+  <arg name="robot_ip" default="192.168.0.47" />
+  <arg name="kinematics_config" default="$(find nrs_robot)/ur10_calibration.yaml"/>
+  <include file="$(find ur_robot_driver)/launch/ur10_bringup.launch">
+    <arg name="robot_ip" value="$(arg robot_ip)"/>
+    <arg name="kinematics_config" value="$(arg kinematics_config)"/>
+  </include>
+  <node pkg="tf2_ros" type="static_transform_publisher" name="tool0_controller_to_tool0" args="0 0 0 0 0 0 tool0_controller tool0" />
+  <node pkg="controller_manager" type="spawner" name="state_controllers_spawner"
+        args="joint_state_controller speed_scaling_state_controller force_torque_sensor_controller" />
+
+  <!-- 2. 툴팁 offset -->
+  <arg name="L" default="0.32"/>
+  <node pkg="tf2_ros" type="static_transform_publisher" name="tool0_to_tip" output="screen"
+        args="0 0 $(arg L) 0 0 0 tool0 tool_tip"/>
+
+  <!-- 3. 툴팁 좌표 저장 노드 -->
+  <node pkg="nrs_robot" type="waypoint_teaching.py" name="waypoint_teaching_node" output="screen"
+        args="">
+    <param name="base_frame" value="base"/>
+    <param name="tip_frame" value="tool_tip"/>
+    <param name="save_path" value="/home/nrs/catkin_ws/src/nrs_path/data/selected_waypoints.txt"/>
+  </node>
+
+</launch>

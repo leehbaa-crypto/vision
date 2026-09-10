@@ -1,0 +1,54 @@
+file_name: "workpiece"
+
+pointcloud_save_node:
+  file_path: "/home/nrs/catkin_ws/src/nrs_vision/pcd/temp_pcd/"
+  
+reconstruction_node:  
+  save_pcd_path: "/home/nrs/catkin_ws/src/nrs_vision/pcd/registrated_pcd/$(file_name).pcd"
+  save_stl_path: "/home/nrs/catkin_ws/src/nrs_vision/mesh/$(file_name).stl"
+
+
+hand_eye_calibration:
+ - 0.0237089
+ - -0.0318342
+ - -0.00866786
+ - -0.000226779
+ - -0.174651
+ - 0.0580134
+
+
+
+minrange:
+  - 0.0
+  - -0.1
+  - 0.0
+  - 1.0
+maxrange:
+  - 0.8
+  - 1.0
+  - 0.5
+  - 1.0
+
+
+downsampleparam: #size of downsampling voxel grid[meter]
+  - 0.003
+sor_mean: #Statistical Outlier Remove filter// the number of nearest neighbors to use for mean distance estimation.
+  - 80
+sor_thresh: #Statistical Outlier Reomve filter// Set the standard deviation multiplier for the distance threshold calculation
+  - 1.0
+ror_radius: #Radius Oulier remove filter// The radius of the sphere for nearest neighbor searching
+  - 0.05
+ror_neighbor: #Radius Oulier remove filter// Set the number of neighbors that need to be present in order to be classified as an inlier.
+  - 300
+smoothing_radius:
+  - 0.07
+relative_alpha:
+  - 80
+relative_offset:
+  - 1000
+bilateral_k: #size of neighborhood. The bigger the smoother the result will be.
+  - 100
+bilateral_sharpness_angle: # control sharpness of the result.
+  - 60
+bilateral_iter_number: # number of times the projection is applied
+  - 30

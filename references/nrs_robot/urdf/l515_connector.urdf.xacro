@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="l515_connector">
+
+  <!--
+    Xacro macro to mount the L515 connector to UR10's tool0 frame.
+    Later, the camera will be mounted on this connector.
+  -->
+
+  <xacro:macro name="l515_connector" params="name:=connector parent *origin use_mesh:=true">
+
+    <xacro:property name="M_PI" value="3.1415926535897931"/>
+    <xacro:property name="connector_mass" value="0.05"/>
+    <xacro:property name="connector_inertia" value="1e-5"/>
+
+    <!-- Fixed joint to attach connector to UR10 tool0 -->
+    <joint name="${name}_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${name}_link"/>
+    </joint>
+
+    <joint name="${name}_mount_to_link_joint" type="fixed">
+        <origin xyz="0.10985 0 0.049" rpy="0 -1.57 3.14"/> 
+        <parent link="${name}_link"/>
+        <child link="${name}_camera_mount_link"/>
+    </joint>
+
+
+
+    <!-- Connector link -->
+    <link name="${name}_link">
+      <visual>
+        <xacro:if value="${use_mesh}">
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+            <mesh filename="package://nrs_nbv/meshes/l515_connector.stl"/>
+          </geometry>
+        </xacro:if>
+        <xacro:unless value="${use_mesh}">
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+            <cylinder length="0.02" radius="0.02"/>
+          </geometry>
+        </xacro:unless>
+        <material name="silver">
+          <color rgba="0.75 0.75 0.75 1.0"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+           <mesh filename="package://nrs_nbv/meshes/l515_connector.stl"/>
+        </geometry>
+      </collision>
+
+      <inertial>
+        <mass value="${connector_mass}"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="${connector_inertia}" iyy="${connector_inertia}" izz="${connector_inertia}"
+                 ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+    </link>
+
+    <link name="${name}_camera_mount_link"/>
+
+  </xacro:macro>
+
+</robot>

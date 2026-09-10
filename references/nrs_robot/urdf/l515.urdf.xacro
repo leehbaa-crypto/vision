@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+<robot name="sensor_l515" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="sensor_l515" params="name:=l515 parent *origin use_mesh:=true publish_pointcloud:=true topics_ns:=camera">
+    <xacro:property name="M_PI" value="3.1415926535897931"/>
+    <xacro:property name="cam_width" value="0.06"/>
+    <xacro:property name="cam_depth" value="0.025"/>
+    <xacro:property name="cam_height" value="0.06"/>
+    <xacro:property name="deg_to_rad" value="0.01745329251994329577" />
+
+    <!-- Mount to robot -->
+    <joint name="${name}_mount_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${name}_link"/>
+    </joint>
+
+    <!-- Camera link -->
+    <link name="${name}_link">
+      <visual>
+        <xacro:if value="${use_mesh}">
+          <origin xyz="0 0 0" rpy="${M_PI/2} 0 ${M_PI/2}"/>
+          <geometry>
+            <mesh filename="package://nrs_nbv/meshes/l515.dae"/>
+          </geometry>
+        </xacro:if>
+        <xacro:unless value="${use_mesh}">
+          <origin xyz="0 0 0" rpy="0 0 0"/>
+          <geometry>
+            <box size="${cam_depth} ${cam_width} ${cam_height}"/>
+          </geometry>
+        </xacro:unless>
+        <material name="grey">
+          <color rgba="0.4 0.4 0.4 1.0"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+           <mesh filename="package://nrs_nbv/meshes/l515.dae"/>
+        </geometry>
+      </collision>
+
+
+      <inertial>
+        <mass value="0.1"/>
+        <origin xyz="0 0 0"/>
+        <inertia ixx="1e-5" iyy="1e-5" izz="1e-5" ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+    </link>
+
+    <!-- Optical frames -->
+    <joint name="${name}_depth_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}"/>
+      <parent link="${name}_link"/>
+      <child link="${name}_depth_optical_frame"/>
+    </joint>
+    <link name="${name}_depth_optical_frame"/>
+
+    <joint name="${name}_color_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}"/>
+      <parent link="${name}_link"/>
+      <child link="${name}_color_optical_frame"/>
+    </joint>
+    <link name="${name}_color_optical_frame"/>
+
+    <joint name="${name}_infra_optical_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2}"/>
+      <parent link="${name}_link"/>
+      <child link="${name}_infra_optical_frame"/>
+    </joint>
+    <link name="${name}_infra_optical_frame"/>
+
+    <!-- Gazebo sensor definitions -->
+    <gazebo reference="${name}_link">
+      <self_collide>0</self_collide>
+      <sensor name="${name}color" type="camera">
+        <camera name="${name}">
+          <horizontal_fov>${71.01*deg_to_rad}</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>RGB_INT8</format>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.007</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>30</update_rate>
+        <visualize>1</visualize>
+      </sensor>
+      <sensor name="${name}ired" type="camera">
+        <camera name="${name}">
+          <horizontal_fov>${70*deg_to_rad}</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>L_INT8</format>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.05</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>90</update_rate>
+        <visualize>0</visualize>
+      </sensor>
+      <sensor name="${name}depth" type="depth">
+        <camera name="${name}">
+          <horizontal_fov>${70*deg_to_rad}</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.100</stddev>
+          </noise>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>90</update_rate>
+        <visualize>0</visualize>
+      </sensor>
+    </gazebo>
+
+    <gazebo>
+      <plugin name="${topics_ns}" filename="librealsense_gazebo_plugin.so">
+        <prefix>${name}</prefix>
+        <depthUpdateRate>30.0</depthUpdateRate>
+        <colorUpdateRate>30.0</colorUpdateRate>
+        <infraredUpdateRate>30.0</infraredUpdateRate>
+        <depthTopicName>/camera/depth/image_rect_raw</depthTopicName>
+        <depthCameraInfoTopicName>/camera/depth/camera_info</depthCameraInfoTopicName>
+        <colorTopicName>/camera/color/image_raw</colorTopicName>
+        <colorCameraInfoTopicName>/camera/color/camera_info</colorCameraInfoTopicName>
+        <infraredTopicName>/camera/infra/image_raw</infraredTopicName>
+        <infraredCameraInfoTopicName>/camera/infra/camera_info</infraredCameraInfoTopicName>
+        <colorOpticalframeName>${name}_color_optical_frame</colorOpticalframeName>
+        <depthOpticalframeName>${name}_depth_optical_frame</depthOpticalframeName>
+        <infraredOpticalframeName>${name}_infra_optical_frame</infraredOpticalframeName>
+        <rangeMinDepth>0.2</rangeMinDepth>
+        <rangeMaxDepth>10.0</rangeMaxDepth>
+        <pointCloud>${publish_pointcloud}</pointCloud>
+        <pointCloudTopicName>/camera/depth/color/points</pointCloudTopicName>
+        <pointCloudCutoff>0.25</pointCloudCutoff>
+        <pointCloudCutoffMax>9.0</pointCloudCutoffMax>
+      </plugin>
+    </gazebo>
+  </xacro:macro>
+</robot>

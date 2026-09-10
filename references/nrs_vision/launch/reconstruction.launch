@@ -1,0 +1,18 @@
+<launch>
+ <!-- YAML 파일 로드 -->
+    <rosparam file="$(find nrs_vision)/config/reconstruction/params_wing.yaml" command="load" />
+    <rosparam file="$(find nrs_vision)/config/reconstruction/params_cart.yaml" command="load" />
+    <rosparam file="$(find nrs_vision)/config/reconstruction/params_guitar.yaml" command="load" />
+
+    <node name="pointcloud_save_node" pkg="nrs_vision" type="pointcloud_save"
+        output="screen" />
+
+    <node name="nrs_node_reconstruction" pkg="nrs_vision" type="reconstruction" output="screen" />
+
+    <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find nrs_vision)/rviz/reconstruction/rviz_config.rviz"
+        output="screen" /> -->
+    <!--터미널 상에서 여러가지 input을 받고, 각 노드로 커맨드를 뿌려주기 위한 노드-->
+    <!-- <node name="keyboard_listener" pkg="nrs_vision" type="keyboard_listener" output="screen" /> -->
+
+</launch>
+  

@@ -1,0 +1,16 @@
+<launch>
+    <!-- RTDE Main Control Node -->
+    <node pkg="rtde_handarm" type="Yoon_UR10e_main" name="Yoon_UR10e_main" output="screen">
+     
+    </node>
+
+    <!-- FT Sensor Acquisition Node -->
+    <node pkg="rtde_handarm" type="Yoon_FT_acquisit" name="Yoon_FT_acquisit" output="screen">
+  
+    </node>
+
+    <!-- Hand Button Command Node -->
+    <node pkg="rtde_handarm" type="NRS_Hbutton_cmd" name="NRS_Hbutton_cmd" output="screen" >
+    
+    </node>
+</launch>

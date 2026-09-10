@@ -1,0 +1,45 @@
+<launch>
+  <!-- 기본 argument -->
+  <arg name="robot_ip" default="192.168.0.47" />
+  <arg name="kinematics_config" default="$(find nrs_robot)/ur10_calibration.yaml"/>
+
+  <!-- 1) UR 드라이버 bringup -->
+  <include file="$(find ur_robot_driver)/launch/ur10_bringup.launch">
+    <arg name="robot_ip" value="$(arg robot_ip)"/>
+    <arg name="kinematics_config" value="$(arg kinematics_config)"/>
+    <!-- 원하는 컨트롤러 지정 -->
+    <arg name="controllers" value="joint_state_controller scaled_pos_joint_traj_controller" />
+    <arg name="stopped_controllers" value="" />
+  </include>
+
+  <!-- 2) MoveIt bringup -->
+  <include file="$(find nrs_ur10_moveit_config)/launch/moveit_planning_execution.launch">
+    <arg name="load_robot_description" value="true" />
+  </include>
+
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find nrs_ur10_moveit_config)/launch/moveit.rviz" required="false" /> -->
+
+
+  <!-- 3) GoToPose server -->
+  <node pkg="nrs_mcp" type="moveit_go_to_pose_server" name="go_to_pose_server" output="screen">
+    <param name="group_name" value="manipulator"/>
+    <param name="eef_link" value="tool0"/>
+    <param name="reference_frame" value="base_link"/>
+    <param name="goal_position_tolerance" value="0.005"/>
+    <param name="goal_orientation_tolerance" value="0.05"/>
+  </node>
+
+  <node pkg="nrs_mcp" type="get_tcp_pose_server" name="get_tcp_pose_server" output="screen">
+    <param name="base_frame" value="base"/>
+    <param name="tool_frame" value="tool0"/>
+    <param name="publish_rate" value="30"/>
+    <param name="lookup_timeout" value="0.2"/>
+  </node>
+
+  <node pkg="nrs_solution" type="nrs_node_stream_camera.py" name="nrs_node_stream_camera" output="screen" />
+  
+  <include file="$(find nrs_solution)/launch/nrs_scan.launch"> 
+  </include>
+
+
+</launch>

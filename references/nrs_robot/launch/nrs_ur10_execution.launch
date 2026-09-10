@@ -1,0 +1,28 @@
+<launch>
+
+  <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="world_to_base" args="0 0 0 0 0 0 world base" />
+  <node pkg="tf2_ros" type="static_transform_publisher" name="tool0_controller_to_tool0" args="0 0 0 0 0 0 tool0_controller tool0" />
+ -->
+
+  <!-- 1. 드라이버 실행 -->
+  <arg name="robot_ip" default="192.168.0.47" />
+  <arg name="kinematics_config" default="$(find nrs_robot)/ur10_calibration.yaml"/>
+  <include file="$(find ur_robot_driver)/launch/ur10_bringup.launch">
+    <arg name="robot_ip" value="$(arg robot_ip)"/>
+    <arg name="kinematics_config" value="$(arg kinematics_config)"/>
+    <arg name="controllers" value="joint_state_controller pos_joint_traj_controller" />
+    <arg name="stopped_controllers" value="" />
+  </include>
+
+  <!-- 2. MoveIt 실행 -->
+  <!-- <include file="$(find nrs_ur10_moveit_config)/launch/moveit_planning_execution.launch">
+    <arg name="load_robot_description" value="false"/>
+  </include> -->
+
+  <!-- 3. RViz (옵션) -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find ur10_moveit_config)/launch/moveit.rviz" required="false" />
+
+
+  <!-- 4. 경로 실행 노드 -->
+  <!-- <node name="nrs_node_ur10_execution" pkg="nrs_robot" type="nrs_node_ur10_execution" output="screen" /> -->
+</launch>

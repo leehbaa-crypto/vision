@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>nrs_mcp</name>
+  <version>0.0.1</version>
+  <description>ROS MCP bridge for UR10: GoToPose GetTcpPose</description>
+
+  <maintainer email="you@example.com">Your Name</maintainer>
+  <license>BSD</license>
+
+  <!-- build tool -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- message generation -->
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
+
+  <!-- core deps -->
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>pcl_ros</depend>
+  <depend>pcl_conversions</depend>
+  <depend>visualization_msgs</depend>
+  <!-- tf2 -->
+  <depend>tf2_ros</depend>
+  <depend>tf2_geometry_msgs</depend>
+
+  <!-- moveit (for moveit_go_to_pose_server) -->
+  <depend>moveit_ros_planning_interface</depend>
+</package>

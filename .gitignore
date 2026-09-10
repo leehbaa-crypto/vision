@@ -42,3 +42,9 @@ simulation_mujoco/MUJOCO_LOG.TXT
 # OS files
 .DS_Store
 Thumbs.db
+
+# Simulation geometry required for restoring the scene
+!simulation_mujoco/**/*.stl
+!simulation_mujoco/**/*.obj
+!simulation_mujoco/**/*.mtl
+!simulation_mujoco/**/*.ply

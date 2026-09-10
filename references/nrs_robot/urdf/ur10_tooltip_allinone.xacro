@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro" name="ur10_robot">
+  <xacro:include filename="$(find nrs_robot)/urdf/ur10.xacro"/>
+  <xacro:include filename="$(find nrs_robot)/urdf/ur10_tooltip.xacro"/>
+  <!-- Robot -->
+
+
+  <!-- Table geometry properties -->
+  <xacro:property name="table_size_x" value="0.84"/>
+  <xacro:property name="table_size_y" value="1.24"/>
+  <xacro:property name="table_size_z" value="0.9"/>
+  <xacro:property name="table_top_z" value="${table_size_z}"/>
+  <xacro:property name="table_center_z" value="${table_size_z / 2}"/>
+
+  <!-- Table link placed on world floor -->
+<link name="table">
+  <!-- 시각 -->
+  <visual>
+    <!--
+      테이블 박스의 "중심"은 코너에서 안쪽/아래로 (hx, hy, hz)
+      링크 원점에서 박스 중심까지의 변환 = (-hx, -hy, -hz)
+      여기에 yaw=+45°(0.785398) 회전 적용
+    -->
+    <origin xyz="-0.32 -0.52 -0.45" rpy="0 0 0"/>
+    <geometry>
+      <box size="${table_size_x} ${table_size_y} ${table_size_z}"/>
+    </geometry>
+    <material name="darkgrey">
+      <color rgba="0.0 0.3 0.3 1.0"/>
+    </material>
+  </visual>
+  <!-- 충돌 -->
+  <collision>
+    <origin xyz="-0.42 -0.62 -0.45" rpy="0 0 0"/>
+    <geometry>
+      <box size="${table_size_x} ${table_size_y} ${table_size_z}"/>
+    </geometry>
+  </collision>
+</link>
+
+
+<link name="workpiece">
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://nrs_robot/meshes/workpiece.stl" scale="1 1 1"/>
+    </geometry>
+    <material name="yellow">
+      <color rgba="1.0 1.0 0.0 1.0"/>
+    </material>
+  </visual>
+  <collision>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <geometry>
+      <mesh filename="package://nrs_robot/meshes/workpiece.stl" scale="1 1 1"/>
+    </geometry>
+  </collision>
+  <inertial>
+    <mass value="1.0"/>
+    <origin xyz="0 0 0"/>
+    <inertia ixx="0.001" iyy="0.001" izz="0.001" ixy="0.0" ixz="0.0" iyz="0.0"/>
+  </inertial>
+</link>
+
+
+  <!-- Fixed joint: table -> base_link -->
+  <joint name="table_robot_joint" type="fixed">
+    <parent link="base_link"/>
+    <child  link="table"/>
+    <origin xyz="0 0 0" rpy="0 0 -0.785398"/>
+  </joint>
+    <joint name="workpiece_on_table" type="fixed">
+    <parent link="base_link"/>
+    <child  link="workpiece"/>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 3.141592"/>
+  </joint>
+
+
+  <xacro:ur10_tooltip
+  parent_link="tool0"
+  tooltip_name="polish_tool"
+  xyz="0 0 0"
+  rpy="0 0 3.141592"
+  cam_name="camera"                    
+  cam_xyz="-0.000226779 0.174651 0.0580134"
+  cam_rpy="0 0 3.141592"/>
+
+
+</robot>

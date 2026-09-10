@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+  <include file="$(find nrs_robot)/launch/load_ur10.launch"/>
+
+  <!-- <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" /> -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher">
+</node>
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find nrs_robot)/rviz/rviz_config.rviz" required="false" />
+</launch>

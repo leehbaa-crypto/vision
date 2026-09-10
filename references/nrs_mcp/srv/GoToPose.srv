@@ -1,0 +1,12 @@
+string target_frame
+geometry_msgs/Pose pose
+float64 vel_scale
+float64 acc_scale
+float64 allowed_planning_time
+bool cartesian
+float64 eef_step
+float64 jump_threshold
+bool plan_only
+---
+bool success
+string message

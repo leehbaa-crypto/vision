@@ -1,0 +1,19 @@
+<launch>
+  <!-- Stream Camera Node (Python) -->
+  <node pkg="nrs_solution" type="nrs_node_stream_camera.py" name="nrs_node_stream_camera" output="screen" />
+
+  <!-- Hand Tracking Node (Python) -->
+  <node pkg="nrs_hand" type="nrs_node_hand_tracking.py" name="nrs_node_hand_tracking" output="screen" />
+  
+  <!-- Hand Gesture Node (Python) -->
+  <node pkg="nrs_hand" type="nrs_node_hand_gesture.py" name="nrs_node_hand_gesture" output="screen" />
+
+  <!-- Visual Servoing Node (C++) -->
+  <node pkg="nrs_hand" type="nrs_node_visual_servoing" name="nrs_node_visual_servoing" output="screen" />
+
+  <!-- Central FSM Node (C++) -->
+  <node pkg="nrs_solution" type="nrs_node_central_FSM" name="nrs_node_central_FSM" output="screen" />
+
+  <!-- <include file="$(find nrs_robot)/launch/view_ur10.launch"/> -->
+
+</launch>

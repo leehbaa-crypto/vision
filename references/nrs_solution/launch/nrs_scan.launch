@@ -1,0 +1,10 @@
+<launch>
+  <!-- <node pkg="nrs_solution" type="test.py" name="nrs_node_idle" output="screen" /> -->
+  <!-- pointcloud와 joint angle subscribe하고 일정 주기마다 저장하는 노드-->
+  <node name="nrs_node_capture" pkg="nrs_vision" type="nrs_node_capture" output="screen" />
+  <node name="nrs_node_registration" pkg="nrs_vision" type="nrs_node_registration" output="screen" />
+  <node name="nrs_node_reconstruction" pkg="nrs_vision" type="nrs_node_reconstruction" output="screen" />
+    <!-- PCL visualize Node (Python) -->
+  <!-- <node pkg="nrs_robot" type="nrs_node_visualize_pcl.py" name="nrs_node_visualize_pcl" output="screen" />   -->
+
+</launch>

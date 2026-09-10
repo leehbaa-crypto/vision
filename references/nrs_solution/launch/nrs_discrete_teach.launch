@@ -1,0 +1,6 @@
+<!-- visual_servoing 노드 -->
+<launch>
+    <node pkg="nrs_solution" type="nrs_node_discrete_teaching.py" name = "nrs_node_discrete_teaching" output="screen" />
+</launch>
+
+<!-- hand_detection 노드에서 검지 점 받아서 joint angle 값 받아서 계산해서 txt파일로 저장하는 노드 -->

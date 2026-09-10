@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="nrs_hand" type="nrs_node_visual_servoing" name="nrs_node_visual_servoing" output="screen" />
+</launch>

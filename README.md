@@ -1,4 +1,4 @@
-# 🦾 UR10e Hand-Following Polishing System (2026-1 URP)
+# vision — 양손 로봇 비전 제어 연구 (2026-1 URP)
 
 본 프로젝트는 **RealSense L515** 레이저 스캐너와 **MediaPipe**를 결합하여 사용자의 손 동작을 실시간 트래킹하고, 이를 통해 **UR10e 로봇**의 폴리싱 작업을 제어하는 ROS 2 기반 연구 프로젝트입니다.
 
@@ -57,7 +57,7 @@ pip install pyrealsense2==2.53.1.* mediapipe mujoco open3d opencv-python
 
 1. **Simulation Bridge:**
    ```bash
-   python3 simulation_mujoco/ros2_mujoco_pure.py
+   python3 simulation_mujoco/ros2_mujoco_pure_v5.py
    ```
 2. **Vision Node (Hand Tracking):**
    ```bash
@@ -81,3 +81,7 @@ pip install pyrealsense2==2.53.1.* mediapipe mujoco open3d opencv-python
 ## ⚠️ 주의 사항 (Disclaimer)
 1. **대용량 데이터 제외:** `hamer/_DATA` 폴더(12GB) 및 각종 `.ckpt`, `.pth` 모델 파일은 깃허브 용량 문제로 제외되었습니다.
 2. **L515 호환성:** 카메라 인식 문제 발생 시 `realsense-viewer`에서 L515가 정상적으로 노출되는지 먼저 확인하십시오. (Firmware 1.6.3.0+ 권장)
+
+## 2026-09-10 연구 보존
+
+UR10e 기반 손 추적에서 양손 로봇 비전 제어로 발전한 연구입니다. 기존 UR10e 구현과 이전 버전도 연구 이력으로 보존합니다. 이전 UR10e 폴리싱 연구는 별도 `ur10e` 저장소로 정리했습니다. Windows에서 확인할 때는 [복원 안내](RESTORE_WINDOWS.md)를 먼저 읽으세요.

@@ -1,0 +1,22 @@
+<launch>
+  <!-- Stream Camera Node (Python) -->
+  <node pkg="nrs_solution" type="nrs_node_stream_camera.py" name="nrs_node_stream_camera" output="screen" />
+
+  <!-- Hand Tracking Node (Python) -->
+  <node pkg="nrs_hand" type="nrs_node_hand_tracking.py" name="nrs_node_hand_tracking" output="screen" />
+
+  <!-- Visual Servoing Node (C++) -->
+  <node pkg="nrs_hand" type="nrs_node_visual_servoing" name="nrs_node_visual_servoing" output="screen" />
+  
+  <!-- Point Cloud Processing Node (C++) -->
+  <node name="nrs_node_capture" pkg="nrs_vision" type="nrs_node_capture" output="screen" />
+  
+  <!-- Point Cloud Registration Node (C++) -->
+  <node name="nrs_node_registration" pkg="nrs_vision" type="nrs_node_registration" output="screen" />
+  
+  <!-- Point Cloud Reconstruction Node (C++) -->
+  <node name="nrs_node_reconstruction" pkg="nrs_vision" type="nrs_node_reconstruction" output="screen" />
+
+  <node name="nrs_node_path_generation" pkg="nrs_path" type="nrs_node_path_generation" output="screen" />
+
+</launch>

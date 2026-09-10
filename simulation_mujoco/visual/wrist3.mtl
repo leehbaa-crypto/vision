@@ -1,0 +1,11 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v5.2.0)
+
+newmtl LinkGrey
+Kd 0.820392191 0.820392191 0.820392191
+Ka 0.25 0.25 0.25
+Ks 0.5 0.5 0.5
+Ke 0 0 0
+Ni 1
+illum 1
+

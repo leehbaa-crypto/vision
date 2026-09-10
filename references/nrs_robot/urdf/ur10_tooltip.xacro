@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="ur10_tooltip">
+
+  <!-- 매크로: UR10 tool0에 STL tooltip 붙이기 -->
+  <xacro:macro name="ur10_tooltip" params="
+      parent_link:=tool0
+      tooltip_name:=tooltip
+      xyz:='0 0 0.1'
+      rpy:='0 0 0'
+      mass:=0.3
+      ixx:=0.0003 iyy:=0.0003 izz:=0.00015
+      ixy:=0.0 ixz:=0.0 iyz:=0.0
+      scale:='1 1 1'
+      cam_name:=l515
+      cam_xyz:='-0.000226779 -0.174651 0.0580134'
+      cam_rpy:='0.0237089 -0.0318342 -0.00866786'\">
+
+    <link name="${tooltip_name}_link">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="${mass}"/>
+        <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}"
+                 iyy="${iyy}" iyz="${iyz}" izz="${izz}"/>
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://nrs_robot/meshes/ur10_tooltip.stl" scale="${scale}"/>
+        </geometry>
+        <material name="${tooltip_name}_mat">
+          <color rgba="0.7 0.7 0.7 1.0"/>
+        </material>
+      </visual>
+
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://nrs_robot/meshes/ur10_tooltip.stl" scale="${scale}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="${tooltip_name}_fix" type="fixed">
+      <parent link="${parent_link}"/>
+      <child link="${tooltip_name}_link"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+
+    <!-- Camera mount frame fixed on tooltip using calibration -->
+    <!-- 단일 카메라 링크만 사용 -->
+    <link name="${cam_name}_link">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.000001"/>
+        <inertia ixx="1e-9" ixy="0" ixz="0" iyy="1e-9" iyz="0" izz="1e-9"/>
+      </inertial>
+    </link>
+
+    <joint name="${cam_name}_fix" type="fixed">
+      <parent link="${tooltip_name}_link"/>
+      <child  link="${cam_name}_link"/>
+      <!-- 캘리브레이션 결과를 바로 적용 -->
+      <origin xyz="${cam_xyz}" rpy="${cam_rpy}"/>
+    </joint>
+
+
+  </xacro:macro>
+
+</robot>
